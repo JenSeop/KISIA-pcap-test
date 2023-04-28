@@ -103,9 +103,4 @@
 </code></pre>
 
 # Preview
-
-
-
-
-
-
+![preview](https://user-images.githubusercontent.com/95238604/235041399-62002589-084f-48c9-b187-e70fe00b274e.png)
