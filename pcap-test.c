@@ -80,32 +80,32 @@ int main(int argc, char* argv[]) {
         printf("%s - MAC : ",WHITE);
         // DA => Destination Address
         for (int i = 0; i < ETH_ALEN; ++i)
-            printf("%s%02X", (i ? ":" : ""), pk_eth->dst[i]);
+            printf("%s%02X", (i ? ":" : ""), pk_eth->DA[i]);
         // SA => Source Address
         for (int i = 0; i < ETH_ALEN; ++i)
-            printf("%s%02X", (i ? ":" : ""), pk_eth->src[i]);
+            printf("%s%02X", (i ? ":" : ""), pk_eth->SA[i]);
 		printf("\n");
 
 		// IPv4  HEADER
         printf("%s* IPv4\n",YELLOW);
-        const struct ipv4_hdr *pk_ipv4 = (const struct ipv4_hdr *)pk_eth->data;
+        const struct ipv4_hdr *pk_ipv4 = (const struct ipv4_hdr *)pk_eth->PI;
         printf("%s - IP : ",WHITE);
-        // SA => Source Address
+        // SIA => Source IP Address
 		printf("(SA) ");
         for (int i = 0; i < IPV4_ALEN; ++i)
-            printf("%s%d", (i ? "." : ""), pk_ipv4->src[i]);
-        // DA => Destination Address
+            printf("%s%d", (i ? "." : ""), pk_ipv4->SIA[i]);
+        // DIA => Destination IP Address
 		printf(" (DA) ");
         for (int i = 0; i < IPV4_ALEN; ++i)
-            printf("%s%d", (i ? "." : ""), pk_ipv4->dst[i]);
+            printf("%s%d", (i ? "." : ""), pk_ipv4->DIA[i]);
         printf("\n");
 
 		// TCP HEADER
         printf("%s* TCP\n",PURPLE);
         uint8_t ihl = IPV4_HL(pk_ipv4);
-        const struct tcp_hdr* pk_tcp = (const struct tcp_hdr*)&pk_ipv4->data[ihl - IPV4_HL_MIN];
-        uint16_t length = ntohs(pk_ipv4->length) - ihl;
-        printf("%s - PORT : (SA) %d (DA) %d\n",WHITE,ntohs(pk_tcp->src),ntohs(pk_tcp->dst));
+        const struct tcp_hdr* pk_tcp = (const struct tcp_hdr*)&pk_ipv4->INF[ihl - IPV4_HL_MIN];
+        uint16_t length = ntohs(pk_ipv4->TL) - ihl;
+        printf("%s - PORT : (SA) %d (DA) %d\n",WHITE,ntohs(pk_tcp->SP),ntohs(pk_tcp->DP));
         uint8_t thl = TCP_HL(pk_tcp);
 	}
 	pcap_close(pcap);
